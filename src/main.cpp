@@ -2,8 +2,16 @@
 #include <lvgl.h>
 #include <ui.h>
 #include <TinyGPSPlus.h>
+#include "compass/compass.hpp"
+#include "time/time.hpp"
 #include "UI/ui_helpers.h"
 #include <Arduino_GFX_Library.h>
+#include <Wire.h>
+
+#define SDA_PIN 37
+#define SCL_PIN 38
+
+Compass compass;
 
 // Constants
 #define TFT_BL 2
@@ -12,6 +20,8 @@
 // Variables
 HardwareSerial gpsSerial(1);
 TinyGPSPlus gps;
+TimeModule timeHandler(gps);
+
 static uint32_t screenWidth;
 static uint32_t screenHeight;
 static lv_disp_draw_buf_t draw_buf;
@@ -106,6 +116,7 @@ void displayInfo()
 {
   if (gps.satellites.isValid())
   {
+    timeHandler.getTimeString();
     Serial.print("Satellites: ");
     Serial.print(gps.satellites.value());
     Serial.print("         Speed: ");
@@ -132,6 +143,10 @@ void setup()
 {
   Serial.begin(115200);
   gpsSerial.begin(9600, SERIAL_8N1, 18, 17);
+
+  Wire.begin(SDA_PIN, SCL_PIN);
+  compass.init();
+  timeHandler.setTimeZoneOffset(-5);
 
   lcd->begin();
   lcd->fillScreen(BLACK);
@@ -176,6 +191,9 @@ void loop()
     {
       displayInfo();
       updateRealSpeed(gps.speed.mph());
+      lv_label_set_text_fmt(ui_LabelSatCount, "%d", gps.satellites.value());
+      lv_label_set_text(ui_LabelTime, timeHandler.getTimeString());
+      compass.update();
     }
   }
 

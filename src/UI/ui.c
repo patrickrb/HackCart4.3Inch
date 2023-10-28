@@ -12,8 +12,15 @@
 // SCREEN: ui_Screen1
 void ui_Screen1_screen_init(void);
 lv_obj_t *ui_Screen1;
-lv_obj_t *ui_LabelSpeed;
+lv_obj_t *ui_Header;
+lv_obj_t *ui_SatInfoPanel;
+lv_obj_t *ui_LabelSatCount;
+lv_obj_t *ui_SatIcon;
+lv_obj_t *ui_TimePanel;
+lv_obj_t *ui_LabelTime;
+lv_obj_t *ui_Panel5;
 lv_obj_t *ui_ArcSpeed;
+lv_obj_t *ui_LabelSpeed;
 lv_obj_t *ui____initial_actions0;
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////

@@ -27,11 +27,19 @@ extern "C" {
 // SCREEN: ui_Screen1
 void ui_Screen1_screen_init(void);
 extern lv_obj_t *ui_Screen1;
-extern lv_obj_t *ui_LabelSpeed;
+extern lv_obj_t *ui_Header;
+extern lv_obj_t *ui_SatInfoPanel;
+extern lv_obj_t *ui_LabelSatCount;
+extern lv_obj_t *ui_SatIcon;
+extern lv_obj_t *ui_TimePanel;
+extern lv_obj_t *ui_LabelTime;
+extern lv_obj_t *ui_Panel5;
 extern lv_obj_t *ui_ArcSpeed;
+extern lv_obj_t *ui_LabelSpeed;
 extern lv_obj_t *ui____initial_actions0;
 
 LV_IMG_DECLARE( ui_img_mock_png);   // assets/Mock.png
+LV_IMG_DECLARE( ui_img_satellite_icon_png);   // assets/satellite_icon.png
 
 
 
