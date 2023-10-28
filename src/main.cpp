@@ -30,9 +30,6 @@ void guiHandler();
 uint16_t touchCalibration_x0 = 300, touchCalibration_x1 = 3600, touchCalibration_y0 = 300, touchCalibration_y1 = 3600;
 uint8_t touchCalibration_rotate = 1, touchCalibration_invert_x = 2, touchCalibration_invert_y = 0;
 
-#if defined(DISPLAY_DEV_KIT)
-Arduino_GFX *lcd = create_default_Arduino_GFX();
-#else
 Arduino_ESP32RGBPanel *bus = new Arduino_ESP32RGBPanel(
     GFX_NOT_DEFINED, GFX_NOT_DEFINED, GFX_NOT_DEFINED,
     40, 41, 39, 42,
@@ -44,7 +41,6 @@ Arduino_RPi_DPI_RGBPanel *lcd = new Arduino_RPi_DPI_RGBPanel(
     480, 0, 8, 2, 43,
     272, 0, 8, 2, 12,
     1, 7000000, true);
-#endif
 
 #include "touch.h"
 
@@ -53,11 +49,7 @@ void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color
   uint32_t w = (area->x2 - area->x1 + 1);
   uint32_t h = (area->y2 - area->y1 + 1);
 
-#if (LV_COLOR_16_SWAP != 0)
-  lcd->draw16bitBeRGBBitmap(area->x1, area->y1, (uint16_t *)&color_p->full, w, h);
-#else
   lcd->draw16bitRGBBitmap(area->x1, area->y1, (uint16_t *)&color_p->full, w, h);
-#endif
 
   lv_disp_flush_ready(disp);
 }
