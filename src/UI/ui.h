@@ -24,6 +24,8 @@ extern "C" {
 
 #include "ui_helpers.h"
 #include "ui_events.h"
+void SlideKeyboardUp_Animation( lv_obj_t *TargetObject, int delay);
+void HideKeyboard_Animation( lv_obj_t *TargetObject, int delay);
 // SCREEN: ui_Screen1
 void ui_Screen1_screen_init(void);
 extern lv_obj_t *ui_Screen1;
@@ -33,12 +35,31 @@ extern lv_obj_t *ui_LabelSatCount;
 extern lv_obj_t *ui_SatIcon;
 extern lv_obj_t *ui_TimePanel;
 extern lv_obj_t *ui_LabelTime;
+void ui_event_Panel5( lv_event_t * e);
 extern lv_obj_t *ui_Panel5;
 extern lv_obj_t *ui_ArcSpeed;
 extern lv_obj_t *ui_LabelSpeed;
+// SCREEN: ui_Screen2
+void ui_Screen2_screen_init(void);
+void ui_event_Screen2( lv_event_t * e);
+extern lv_obj_t *ui_Screen2;
+extern lv_obj_t *ui_WifiFormPanel;
+extern lv_obj_t *ui_LabelWifiSettings;
+extern lv_obj_t *ui_PanelWIfiSettings;
+extern lv_obj_t *ui_DropdownSSID;
+void ui_event_TextAreaWifiPassword( lv_event_t * e);
+extern lv_obj_t *ui_TextAreaWifiPassword;
+extern lv_obj_t *ui_PanelWIfiSettingsButtons;
+void ui_event_ButtonCancelWifi( lv_event_t * e);
+extern lv_obj_t *ui_ButtonCancelWifi;
+extern lv_obj_t *ui_LabelCancelWifi;
+void ui_event_ButtonSaveWifi( lv_event_t * e);
+extern lv_obj_t *ui_ButtonSaveWifi;
+extern lv_obj_t *ui_LabelSaveWifi;
+void ui_event_Keyboard1( lv_event_t * e);
+extern lv_obj_t *ui_Keyboard1;
 extern lv_obj_t *ui____initial_actions0;
 
-LV_IMG_DECLARE( ui_img_mock_png);   // assets/Mock.png
 LV_IMG_DECLARE( ui_img_satellite_icon_png);   // assets/satellite_icon.png
 
 

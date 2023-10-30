@@ -4,6 +4,7 @@
 #include <TinyGPSPlus.h>
 #include "compass/compass.hpp"
 #include "time/time.hpp"
+#include "WifiManager/WifiManager.hpp"
 #include "UI/ui_helpers.h"
 #include <Arduino_GFX_Library.h>
 #include <Wire.h>
@@ -11,13 +12,13 @@
 #define SDA_PIN 37
 #define SCL_PIN 38
 
-Compass compass;
-
 // Constants
 #define TFT_BL 2
 #define GFX_BL DF_GFX_BL
 
 // Variables
+Compass compass;
+WifiManager wifiManager;
 HardwareSerial gpsSerial(1);
 TinyGPSPlus gps;
 TimeModule timeHandler(gps);
@@ -112,31 +113,45 @@ void guiHandler()
       1);
 }
 
-void displayInfo()
+void keyboard_event_cb(lv_event_t *e)
 {
-  if (gps.satellites.isValid())
-  {
-    timeHandler.getTimeString();
-    Serial.print("Satellites: ");
-    Serial.print(gps.satellites.value());
-    Serial.print("         Speed: ");
-    Serial.print(gps.speed.mph());
-    Serial.println(" mph");
-  }
-  else
-  {
-    Serial.println("Searching for satellites...");
-  }
+  lv_event_code_t code = lv_event_get_code(e);
+  lv_obj_t *kb = lv_event_get_target(e);
 
-  if (gps.hdop.isValid())
+  if (code == LV_EVENT_VALUE_CHANGED)
   {
-    Serial.print("HDOP (Relative accuracy of horizontal position): ");
-    Serial.println(gps.hdop.value());
+    uint16_t btn_idx = lv_keyboard_get_selected_btn(kb);
+
+    // Display button index on the label for testing purposes
+    // lv_label_set_text_fmt(ui_LabelTime, "Key index: %d", btn_idx);
+    // Serial.print("Button pressed with index: ");
+    // Serial.println(btn_idx);
+    if (btn_idx == 39)
+    {
+      Serial.println('Enter pressed!');
+      HideKeyboard_Animation(ui_Keyboard1, 0);
+    }
   }
-  else
-  {
-    Serial.println("Location not valid!");
-  }
+}
+
+void connect_button_event_cb(lv_event_t *e)
+{
+  char SSIDBuffer[128];
+  lv_dropdown_get_selected_str(ui_DropdownSSID, SSIDBuffer, sizeof(SSIDBuffer));
+
+  // Retrieve password from text area
+  const char *password = lv_textarea_get_text(ui_TextAreaWifiPassword);
+
+  Serial.print("Selected SSID: ");
+  Serial.print(SSIDBuffer);
+  Serial.print("          Password: ");
+  Serial.println(password);
+
+  // Now initiate a WiFi connection
+  wifiManager.connectToSSID(SSIDBuffer, password);
+
+  // Optional: Provide feedback to the user, for instance:
+  // lv_label_set_text(ui_LabelConnectionStatus, "Connecting...");
 }
 
 void setup()
@@ -180,6 +195,10 @@ void setup()
 
   ui_init();
   guiHandler();
+  lv_obj_add_event_cb(ui_Keyboard1, keyboard_event_cb, LV_EVENT_ALL, NULL);
+  lv_obj_add_event_cb(ui_ButtonSaveWifi, connect_button_event_cb, LV_EVENT_CLICKED, NULL);
+
+  wifiManager.scanAndPopulateDropdown(ui_DropdownSSID);
 }
 
 void loop()
@@ -189,7 +208,6 @@ void loop()
     char c = gpsSerial.read();
     if (gps.encode(c))
     {
-      displayInfo();
       updateRealSpeed(gps.speed.mph());
       lv_label_set_text_fmt(ui_LabelSatCount, "%d", gps.satellites.value());
       lv_label_set_text(ui_LabelTime, timeHandler.getTimeString());

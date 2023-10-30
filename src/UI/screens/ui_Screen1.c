@@ -34,6 +34,8 @@ lv_obj_set_height( ui_SatInfoPanel, 32);
 lv_obj_set_x( ui_SatInfoPanel, -199 );
 lv_obj_set_y( ui_SatInfoPanel, -2 );
 lv_obj_set_align( ui_SatInfoPanel, LV_ALIGN_CENTER );
+lv_obj_set_flex_flow(ui_SatInfoPanel,LV_FLEX_FLOW_ROW_REVERSE);
+lv_obj_set_flex_align(ui_SatInfoPanel, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 lv_obj_clear_flag( ui_SatInfoPanel, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
 lv_obj_set_style_bg_color(ui_SatInfoPanel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_bg_opa(ui_SatInfoPanel, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
@@ -123,5 +125,7 @@ lv_label_set_text(ui_LabelSpeed,"0");
 lv_obj_set_style_text_color(ui_LabelSpeed, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_text_opa(ui_LabelSpeed, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_text_font(ui_LabelSpeed, &lv_font_montserrat_48, LV_PART_MAIN| LV_STATE_DEFAULT);
+
+lv_obj_add_event_cb(ui_Panel5, ui_event_Panel5, LV_EVENT_ALL, NULL);
 
 }
